@@ -16,6 +16,6 @@ namespace Helpers {
     {
         return x > y ? x : y;
     }
-};
+}
 
 #endif

@@ -21,10 +21,8 @@
 
 namespace RunningManager
 {
-    static Timer timer;
-    static bool program_running = true;
-    static SDL_Event event;
-
+    // -----------------------------------------------------------
+    // CORE FUNCTIONS
     void StartFrame();
     void FinishFrame();
     void HandleUserInput();
@@ -34,10 +32,9 @@ namespace RunningManager
     void SetVerboseMode();
     void ReleaseDependencies();
     void RenderScreen();
+    
     // -----------------------------------------------------------
-    // UI ELEMENTS
-
-    static Button * quit_button;
+    // UI FUNCTIONS
     void InitializeUIElments();
 }
 

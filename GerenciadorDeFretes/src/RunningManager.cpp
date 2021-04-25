@@ -1,6 +1,12 @@
 #include "RunningManager.hpp"
 #include <iostream>
 
+static Timer timer;
+static bool program_running = true;
+static SDL_Event event;
+
+static Button * quit_button = nullptr;
+
 void RunningManager::StartFrame()
 {
     double_t elapsed_time = timer.getElapsedTime();
