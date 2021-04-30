@@ -15,16 +15,19 @@ TextField * TextField::newTextField(const uint16_t width,
     tf->_normal_background->setParent(tf);
     tf->_normal_background->setRelativeX(0);
     tf->_normal_background->setRelativeY(0);
+    tf->_normal_background->show();
 
     tf->_highlight_background = SolidImage::newSolidImage(highlight_background_name, width, height);
     tf->_highlight_background->setParent(tf);
     tf->_highlight_background->setRelativeX(0);
     tf->_highlight_background->setRelativeY(0);
+    tf->_highlight_background->hide();
 
     tf->_focused_background = SolidImage::newSolidImage(focused_background, width, height);
     tf->_focused_background->setParent(tf);
     tf->_focused_background->setRelativeX(0);
     tf->_focused_background->setRelativeY(0);
+    tf->_focused_background->hide();
 
     tf->_content = DynamicText::newDynamicText("Type here...");
     tf->_content->setParent(tf);
