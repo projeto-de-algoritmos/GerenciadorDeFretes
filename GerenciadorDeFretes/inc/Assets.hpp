@@ -61,7 +61,7 @@ namespace Assets
     // Text field Assets
     const uint16_t      TEXTFIELD_WIDTH = 200,
                         TEXTFIELD_HEIGHT = 23,
-                        TEXTFIELD_MAXCHARS = 22;
+                        TEXTFIELD_MAXCHARS = 26;
     const std::string   TEXTFIELD_NORMAL_BACKGROUND = "normal_textfield.png",
                         TEXTFIELD_HIGHLIGHT_BACKGROUND = "highlight_textfield.png",
                         TEXTFIELD_FOCUSED_BACKGROUND = "focused_textfield.png";

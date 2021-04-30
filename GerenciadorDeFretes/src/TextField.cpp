@@ -31,7 +31,7 @@ TextField * TextField::newTextField(const uint16_t width,
 
     tf->_content = DynamicText::newDynamicText("Type here...");
     tf->_content->setParent(tf);
-    tf->_content->setRelativeX(3);
+    tf->_content->setRelativeX(8);
     tf->_content->setRelativeY(5);
     
     tf->setAlphaNumericMode();

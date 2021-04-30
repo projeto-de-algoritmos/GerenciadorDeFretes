@@ -35,6 +35,12 @@ void DynamicText::setText(const std::string & text)
     AssetsManager * am = AssetsManager::getInstance();
     for (int32_t i = 0; i < (int32_t) text.size(); i++) {
         _chars[i]->setTexture(am->getTextTexture(_font_name, _font_size, std::string(1, text[i]), _font_color));
+        int new_width, new_height;
+
+        TTF_SizeText(am->getFont(_font_name, _font_size), std::string(1, text[i]).c_str(), &new_width, &new_height);
+
+        _chars[i]->setWidth(new_width);
+        _chars[i]->setHeight(new_height);
         _chars[i]->setRelativeX(_chars[i]->getParent()->getWidth());
         _chars[i]->show();
     }
