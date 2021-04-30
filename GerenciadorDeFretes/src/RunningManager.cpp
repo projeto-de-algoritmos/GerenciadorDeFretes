@@ -11,6 +11,8 @@ static TextField * tf1 = nullptr;
 static TextField * tf2 = nullptr;
 static TextField * tf3 = nullptr;
 
+static Button * get_value_btn = nullptr;
+
 void RunningManager::StartFrame()
 {
     double_t elapsed_time = timer.getElapsedTime();
@@ -77,6 +79,11 @@ void RunningManager::RenderScreen()
     VisualComponent::drawComponents();
 }
 
+void ShowValue()
+{
+    std::cout << tf3->getNumericValue() << std::endl;
+}
+
 void RunningManager::InitializeUIElments()
 {
     quit_button = Button::newButton("Sair");
@@ -99,4 +106,10 @@ void RunningManager::InitializeUIElments()
     tf3->setRelativeY(tf2->getHeight() + 10);
     tf3->setParent(tf2);
     tf3->setNumericOnlyMode();
+
+    get_value_btn = Button::newButton("Valor");
+    get_value_btn->setParent(quit_button);
+    get_value_btn->setRelativeX(quit_button->getWidth() + 10);
+    get_value_btn->setRelativeY(0);
+    get_value_btn->setClickReaction(ShowValue);
 }

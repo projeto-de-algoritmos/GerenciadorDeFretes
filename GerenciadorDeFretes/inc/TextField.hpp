@@ -30,6 +30,8 @@ public:
     bool isAlphaNumericMode() const noexcept;
     void setAlphaNumericMode() noexcept;
 
+    double getNumericValue() const noexcept;
+
 private:
     bool isAlpha(int32_t c);
     bool isNumeric(int32_t c);

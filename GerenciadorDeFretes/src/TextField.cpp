@@ -75,6 +75,25 @@ void TextField::setAlphaNumericMode() noexcept
     _mode_flag = 3;
 }
 
+double TextField::getNumericValue() const noexcept
+{
+    if (!isNumericOnlyMode())
+        return 0.0;
+
+    auto str = _content->getText();
+    int dotpos = 0;
+    for (int i = 0; i < (int32_t) str.size(); i++) {
+        if (str[i] == '.') {
+            dotpos = i;
+            break;
+        }
+    }
+    if (dotpos == (int32_t) str.size() - 1 || str.size() == 0)
+        str.push_back('0');
+
+    return std::stod(str);
+}
+
 bool TextField::isAlpha(int32_t c)
 {
     return (c >= int32_t('a') && c <= int32_t('z')) || (c >= int32_t('A') && c <= int32_t('Z') || c == ' ');
