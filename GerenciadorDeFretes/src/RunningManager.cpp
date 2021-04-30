@@ -1,4 +1,5 @@
 #include "RunningManager.hpp"
+#include "TextField.hpp"
 #include <iostream>
 
 static Timer timer;
@@ -6,6 +7,9 @@ static bool program_running = true;
 static SDL_Event event;
 
 static Button * quit_button = nullptr;
+static TextField * tf1 = nullptr;
+static TextField * tf2 = nullptr;
+static TextField * tf3 = nullptr;
 
 void RunningManager::StartFrame()
 {
@@ -79,4 +83,20 @@ void RunningManager::InitializeUIElments()
     quit_button->setClickReaction(RunningManager::FinishProgramExecution);
     quit_button->setGlobalX(Assets::WINDOW_WIDTH / 2 - quit_button->getWidth() / 2);
     quit_button->setGlobalY(Assets::WINDOW_HEIGHT - quit_button->getHeight() - 10);
+
+    tf1 = TextField::newTextField();
+    tf1->setRelativeX(10);
+    tf1->setRelativeY(10);
+
+    tf2 = TextField::newTextField();
+    tf2->setRelativeX(0);
+    tf2->setRelativeY(tf1->getHeight() + 10);
+    tf2->setParent(tf1);
+    tf2->setAlphaOnlyMode();
+
+    tf3 = TextField::newTextField();
+    tf3->setRelativeX(0);
+    tf3->setRelativeY(tf2->getHeight() + 10);
+    tf3->setParent(tf2);
+    tf3->setNumericOnlyMode();
 }

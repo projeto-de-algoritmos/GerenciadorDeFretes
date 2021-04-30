@@ -18,6 +18,7 @@ public:
                                         const SDL_Color & font_color = Assets::DYNAMICTEXT_FONT_COLOR);
 
     void setText(const std::string & text);
+    std::string getText() const noexcept;
 
     uint16_t getWidth() const noexcept;
     uint16_t getHeight() const noexcept;

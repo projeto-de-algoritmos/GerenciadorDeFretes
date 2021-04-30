@@ -50,13 +50,21 @@ namespace Assets
 
     // Dynamic Text Assets
     const std::string   DYNAMICTEXT_FONT_NAME = "arial.ttf";
-    const SDL_Color     DYNAMICTEXT_FONT_COLOR = {0x1f, 0x1f, 0x1f, 0xff};
+    const SDL_Color     DYNAMICTEXT_FONT_COLOR = {0x0, 0x0, 0x0, 0xff};
     const uint16_t      DYNAMICTEXT_FONT_SIZE = 13;
 
     // SolidText Assets
     const std::string   SOLIDTEXT_FONT_NAME = "arial.ttf";
     const uint8_t       SOLIDTEXT_FONT_SIZE = 14;
     const SDL_Color     SOLIDTEXT_FONT_COLOR = {0x1f, 0x1f, 0x1f, 0xff};
+
+    // Text field Assets
+    const uint16_t      TEXTFIELD_WIDTH = 200,
+                        TEXTFIELD_HEIGHT = 23,
+                        TEXTFIELD_MAXCHARS = 22;
+    const std::string   TEXTFIELD_NORMAL_BACKGROUND = "normal_textfield.png",
+                        TEXTFIELD_HIGHLIGHT_BACKGROUND = "highlight_textfield.png",
+                        TEXTFIELD_FOCUSED_BACKGROUND = "focused_textfield.png";
 }
 
 #endif

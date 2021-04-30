@@ -43,6 +43,11 @@ void DynamicText::setText(const std::string & text)
         _chars[i]->hide();
 }
 
+std::string DynamicText::getText() const noexcept
+{
+    return _text;
+}
+
 uint16_t DynamicText::getWidth() const noexcept
 {
     uint16_t total_width = 0;

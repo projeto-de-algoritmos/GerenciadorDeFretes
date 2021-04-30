@@ -92,6 +92,10 @@ void InteractiveComponent::processMouseButtonUp(const SDL_Point & cursor_coordin
     int32_t delta_y = cursor_coordinates.y - _selected_component->_initial_dragging_position.y;
     if (SDL_abs(delta_x) <= 2 && SDL_abs(delta_y) <= 2) {
         _selected_component->reactToClick(cursor_coordinates);
+        if (_focused_component != _selected_component) {
+            _focused_component->reactToFocusLosing();
+            _selected_component->reactToFocusGaining();
+        }
         _focused_component = _selected_component;
     }
     
@@ -137,6 +141,18 @@ void InteractiveComponent::deactivate()
 bool InteractiveComponent::isActive() const
 {
     return _is_active;
+}
+
+bool InteractiveComponent::isFocused() const
+{
+    return this == _focused_component;
+}
+
+void InteractiveComponent::setFocus()
+{
+    _focused_component->reactToFocusLosing();
+    _focused_component = this;
+    _focused_component->reactToFocusGaining();
 }
 
 InteractiveComponent * InteractiveComponent::getComponentByClickCoordinates(const SDL_Point & coordinates)
@@ -195,6 +211,16 @@ void InteractiveComponent::reactToCursorStopedOverlappingComponent(const SDL_Poi
 }
 
 void InteractiveComponent::reactToKeyPressing(int32_t sdl_keysym)
+{
+
+}
+
+void InteractiveComponent::reactToFocusGaining()
+{
+
+}
+
+void InteractiveComponent::reactToFocusLosing()
 {
 
 }

@@ -27,6 +27,9 @@ public:
     void deactivate();
     bool isActive() const;
 
+    bool isFocused() const;
+    void setFocus();
+
 private:
     static InteractiveComponent * getComponentByClickCoordinates(const SDL_Point & coordinates);
 
@@ -75,6 +78,12 @@ protected:
 
     // The reaction when a key from keyboard is pressed
     virtual void reactToKeyPressing(int32_t sdl_keysym);
+
+    // The reaction when this component gain focus
+    virtual void reactToFocusGaining();
+
+    // The reaction when this component loses focus
+    virtual void reactToFocusLosing();
 };
 
 #endif
