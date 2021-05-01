@@ -84,7 +84,7 @@ double TextField::getNumericValue() const noexcept
         return 0.0;
 
     auto str = _content->getText();
-    int dotpos = 0;
+    int dotpos = -1;
     for (int i = 0; i < (int32_t) str.size(); i++) {
         if (str[i] == '.') {
             dotpos = i;
