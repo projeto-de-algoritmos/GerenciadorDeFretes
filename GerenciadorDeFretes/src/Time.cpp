@@ -1,12 +1,14 @@
 #include <string>
 #include <stdexcept>
+#include <cctype>
+
 #include "Time.hpp"
 
 Time::Time(const std::string & str)
 {
-    if (str.size() != 8 || !isnumber(str[0]) || !isnumber(str[1]) ||
-      !isnumber(str[3]) || !isnumber(str[4]) || !isnumber(str[6]) ||
-      !isnumber(str[7]) || str[2] != ':' || str[5] != ':')
+    if (str.size() != 8 || !std::isdigit(str[0]) || !std::isdigit(str[1]) ||
+      !std::isdigit(str[3]) || !std::isdigit(str[4]) || !std::isdigit(str[6]) ||
+      !std::isdigit(str[7]) || str[2] != ':' || str[5] != ':')
         throw std::runtime_error("Attempt to construct a new Time object with invalid string: " + str);
     
     uint16_t hour = uint16_t(str[0] - '0') * 10 + uint16_t(str[1] - '0');
@@ -89,7 +91,7 @@ bool Time::operator=(const Time & t2) const noexcept
     return toSeconds() == t2.toSeconds();
 }
 
-Time Time::difference(const Time & t2) const noexcept
+Time Time::difference(const Time & t2) const
 {   
     if (t2 > *this)
         return Time(t2.toSeconds() - toSeconds());

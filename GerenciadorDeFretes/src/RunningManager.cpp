@@ -1,5 +1,7 @@
 #include "RunningManager.hpp"
 #include "TextField.hpp"
+#include "PageContainer.hpp"
+#include "CellContainer.hpp"
 #include <iostream>
 
 static Timer timer;
@@ -12,6 +14,9 @@ static TextField * tf2 = nullptr;
 static TextField * tf3 = nullptr;
 
 static Button * get_value_btn = nullptr;
+
+static CellContainer * cc1 = nullptr;
+static CellContainer * cc2 = nullptr;
 
 void RunningManager::StartFrame()
 {
@@ -79,9 +84,12 @@ void RunningManager::RenderScreen()
     VisualComponent::drawComponents();
 }
 
-void ShowValue()
+void changecc()
 {
-    std::cout << tf3->getNumericValue() << std::endl;
+    if (cc2->getCellAlignment() != CellContainer::CellAlignment::TOP_MIDDLE)
+        cc2->setCellAlignment(CellContainer::CellAlignment::TOP_MIDDLE);
+    else
+        cc2->setCellAlignment(CellContainer::CellAlignment::BOTTOM_MIDDLE);
 }
 
 void RunningManager::InitializeUIElments()
@@ -107,9 +115,19 @@ void RunningManager::InitializeUIElments()
     tf3->setParent(tf2);
     tf3->setNumericOnlyMode();
 
-    get_value_btn = Button::newButton("Valor");
+    get_value_btn = Button::newButton("Mudar container");
     get_value_btn->setParent(quit_button);
     get_value_btn->setRelativeX(quit_button->getWidth() + 10);
     get_value_btn->setRelativeY(0);
-    get_value_btn->setClickReaction(ShowValue);
+    get_value_btn->setClickReaction(changecc);
+
+    cc1 = CellContainer::newCellContainer(100, 100, CellContainer::CellAlignment::BOTTOM_MIDDLE, quit_button);
+    cc1->setParent(tf1);
+    cc1->setRelativeX(tf1->getWidth() + 10);
+    cc1->setRelativeY(0);
+
+    cc2 = CellContainer::newCellContainer(100, 100, CellContainer::CellAlignment::TOP_MIDDLE, get_value_btn);
+    cc2->setParent(cc1);
+    cc2->setRelativeX(0);
+    cc2->setRelativeY(cc1->getHeight());
 }

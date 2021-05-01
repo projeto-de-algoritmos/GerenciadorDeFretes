@@ -28,8 +28,8 @@ public:
     // Create a new cell
     static CellContainer * newCellContainer(uint16_t width,
                                             uint16_t height,
-                                            VisualComponent * item = nullptr,
                                             CellAlignment cell_alignment = MIDDLE_MIDDLE,
+                                            VisualComponent * item = nullptr,
                                             int32_t pos_x = 0,
                                             int32_t pos_y = 0);
 
@@ -38,6 +38,9 @@ public:
 
     void setWidth(uint16_t width) noexcept;
     void setHeight(uint16_t heigth) noexcept;
+
+    CellAlignment getCellAlignment() const noexcept;
+    void setCellAlignment(CellAlignment cell_alignment) noexcept;
 
 private:
     // Called whenever a new item is setted or cell is modified

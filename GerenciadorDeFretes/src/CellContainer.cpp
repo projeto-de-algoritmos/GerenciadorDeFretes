@@ -18,7 +18,7 @@ CellContainer * CellContainer::newCellContainer(uint16_t width,
                                                 int32_t pos_x,
                                                 int32_t pos_y)
 {
-    return new CellContainer(width, height, pos_x, pos_y, item, cell_alignment;
+    return new CellContainer(width, height, pos_x, pos_y, item, cell_alignment);
 }
 
 VisualComponent * CellContainer::getItem() const noexcept
@@ -32,6 +32,7 @@ void CellContainer::setItem(VisualComponent * item) noexcept
         return;
 
     _item = item;
+    _item->setParent(this);
     updateCellDimensions();
 }
 
@@ -44,6 +45,17 @@ void CellContainer::setWidth(uint16_t width) noexcept
 void CellContainer::setHeight(uint16_t height) noexcept
 {
     VisualComponent::setHeight(height);
+    updateCellDimensions();
+}
+
+CellContainer::CellAlignment CellContainer::getCellAlignment() const noexcept
+{
+    return _cell_alignment;
+}
+
+void CellContainer::setCellAlignment(CellAlignment cell_alignment) noexcept
+{
+    _cell_alignment = cell_alignment;
     updateCellDimensions();
 }
 
@@ -120,6 +132,11 @@ _cell_alignment(cell_alignment)
 {
     setDisplayCascade(true);
     tie();
+    _item->setParent(this);
     updateCellDimensions();
 }
 
+CellContainer::~CellContainer()
+{
+
+}
