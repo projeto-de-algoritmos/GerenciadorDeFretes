@@ -63,6 +63,8 @@ public:
     
     void draw();
 
+    void setDisplayCascade(bool enable);
+
 private:
     static VisualComponent * SCREEN;
     static bool VERBOSE;
@@ -80,6 +82,7 @@ private:
     bool _is_hide;
     SDL_Rect _body;
     SDL_Color _color;
+    bool _display_cascate;
 
 protected:
 
