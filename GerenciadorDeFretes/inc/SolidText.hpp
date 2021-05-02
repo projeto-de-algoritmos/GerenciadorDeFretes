@@ -2,12 +2,12 @@
 #define _SOLIDTEXT_HPP_
 
 #include "Assets.hpp"
-#include "VisualComponent.hpp"
+#include "InteractiveComponent.hpp"
 
 #include <string>
 #include <cstdint>
 
-class SolidText : public VisualComponent
+class SolidText : public InteractiveComponent
 {
 public:
     static SolidText * newSolidText(const std::string & text,

@@ -1,7 +1,7 @@
 #ifndef _DYNAMIC_TEXT_HPP_
 #define _DYNAMIC_TEXT_HPP_
 
-#include "VisualComponent.hpp"
+#include "InteractiveComponent.hpp"
 #include "SolidText.hpp"
 #include "Assets.hpp"
 
@@ -9,7 +9,7 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-class DynamicText : public VisualComponent
+class DynamicText : public InteractiveComponent
 {
 public:
     static DynamicText * newDynamicText(const std::string & text,

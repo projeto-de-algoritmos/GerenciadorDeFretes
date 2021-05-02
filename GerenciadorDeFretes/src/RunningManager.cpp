@@ -126,6 +126,7 @@ void RunningManager::InitializeUIElments()
     get_value_btn->setClickReaction(changecc);
 
     pc = PageContainer::newPageContainer(90, 300, 3);
+    pc->pushItem(SolidImage::newSolidImage("carreta1.png", 90, 90));
     pc->pushItem(TextField::newTextField());
     pc->pushItem(Button::newButton("Kappa"));
     pc->pushItem(TextField::newTextField());

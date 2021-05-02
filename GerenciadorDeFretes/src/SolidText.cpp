@@ -17,9 +17,9 @@ SolidText * SolidText::newSolidText(const std::string & text,
 }
 
 SolidText::SolidText(uint16_t width, uint16_t height, SDL_Texture * texture):
-VisualComponent(width, height, {0xFF, 0xFF, 0xFF, 0xFF}, texture)
+InteractiveComponent(width, height, {0xFF, 0xFF, 0xFF, 0xFF}, texture)
 {
-
+    InteractiveComponent::deactivate();
 }
 
 SolidText::~SolidText()

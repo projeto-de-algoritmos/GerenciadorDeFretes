@@ -89,18 +89,18 @@ void DynamicText::show()
 }
 
 DynamicText::DynamicText(const std::string & font_name, uint16_t font_size, const SDL_Color & font_color):
-VisualComponent(0,0),
+InteractiveComponent(0,0),
 _font_color(font_color),
 _font_size(font_size),
 _font_name(font_name)
 {
-
+    InteractiveComponent::deactivate();
 }
 
 DynamicText::DynamicText(DynamicText & dt):
-VisualComponent(0,0)
+InteractiveComponent(0,0)
 {
-
+    InteractiveComponent::deactivate();
 }
 
 DynamicText::~DynamicText()

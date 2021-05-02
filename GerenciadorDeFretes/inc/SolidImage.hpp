@@ -1,10 +1,10 @@
 #ifndef _SOLIDIMAGE_HPP_
 #define _SOLIDIMAGE_HPP_
 
-#include "VisualComponent.hpp"
+#include "InteractiveComponent.hpp"
 #include <string>
 
-class SolidImage : public VisualComponent
+class SolidImage : public InteractiveComponent
 {
 public:
     static SolidImage * newSolidImage(const std::string & image_name, uint16_t width, uint16_t height);
