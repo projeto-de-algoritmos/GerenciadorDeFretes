@@ -1,9 +1,10 @@
 #include <stdexcept>
+#include <iostream>
 
 #include "CellContainer.hpp"
 #include "Helpers.hpp"
 
-CellContainer * CellContainer::newCellContainer(VisualComponent * item)
+CellContainer * CellContainer::newCellContainer(InteractiveComponent * item)
 {
     if (item == nullptr)
         throw std::runtime_error("Attempt to create a cell container based on nullptr item");
@@ -13,20 +14,20 @@ CellContainer * CellContainer::newCellContainer(VisualComponent * item)
 
 CellContainer * CellContainer::newCellContainer(uint16_t width,
                                                 uint16_t height,
+                                                InteractiveComponent * item,
                                                 CellAlignment cell_alignment,
-                                                VisualComponent * item,
                                                 int32_t pos_x,
                                                 int32_t pos_y)
 {
     return new CellContainer(width, height, pos_x, pos_y, item, cell_alignment);
 }
 
-VisualComponent * CellContainer::getItem() const noexcept
+InteractiveComponent * CellContainer::getItem() const noexcept
 {
     return _item;
 }
 
-void CellContainer::setItem(VisualComponent * item) noexcept
+void CellContainer::setItem(InteractiveComponent * item) noexcept
 {
     if (item == getItem())
         return;
@@ -46,6 +47,19 @@ void CellContainer::setHeight(uint16_t height) noexcept
 {
     VisualComponent::setHeight(height);
     updateCellDimensions();
+}
+
+void CellContainer::hideCell() noexcept
+{
+    VisualComponent::hide();
+    _item->deactivate();
+}
+
+void CellContainer::showCell() noexcept
+{
+    VisualComponent::show();
+    if (_item_is_active)
+        _item->activate();
 }
 
 CellContainer::CellAlignment CellContainer::getCellAlignment() const noexcept
@@ -124,14 +138,17 @@ CellContainer::CellContainer(uint16_t width,
                              uint16_t height,
                              int32_t pos_x,
                              int32_t pos_y,
-                             VisualComponent * item,
+                             InteractiveComponent * item,
                              CellAlignment cell_alignment):
 InteractiveComponent(width, height),
 _item(item),
-_cell_alignment(cell_alignment)
+_cell_alignment(cell_alignment),
+_item_is_active(_item->isActive())
 {
-    setDisplayCascade(true);
-    tie();
+    VisualComponent::setInvisibility(true);
+    VisualComponent::setDisplayCascade(true);
+    InteractiveComponent::tie();
+    InteractiveComponent::deactivate();
     _item->setParent(this);
     updateCellDimensions();
 }

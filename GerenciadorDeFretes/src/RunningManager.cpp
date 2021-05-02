@@ -2,6 +2,7 @@
 #include "TextField.hpp"
 #include "PageContainer.hpp"
 #include "CellContainer.hpp"
+
 #include <iostream>
 
 static Timer timer;
@@ -15,8 +16,7 @@ static TextField * tf3 = nullptr;
 
 static Button * get_value_btn = nullptr;
 
-static CellContainer * cc1 = nullptr;
-static CellContainer * cc2 = nullptr;
+static PageContainer * pc = nullptr;
 
 void RunningManager::StartFrame()
 {
@@ -86,10 +86,14 @@ void RunningManager::RenderScreen()
 
 void changecc()
 {
-    if (cc2->getCellAlignment() != CellContainer::CellAlignment::TOP_MIDDLE)
-        cc2->setCellAlignment(CellContainer::CellAlignment::TOP_MIDDLE);
-    else
-        cc2->setCellAlignment(CellContainer::CellAlignment::BOTTOM_MIDDLE);
+    if (pc->pageDisplayed() + 1 == pc->getPagesQuantity()) {
+        std::cout << "Ovo displeyar a pagina 0\n"; 
+        pc->displayPage(0);
+    }
+    else {
+        std::cout << "Displaying page " << pc->pageDisplayed() + 1 << std::endl;
+        pc->displayPage(pc->pageDisplayed() + 1);
+    }
 }
 
 void RunningManager::InitializeUIElments()
@@ -121,13 +125,11 @@ void RunningManager::InitializeUIElments()
     get_value_btn->setRelativeY(0);
     get_value_btn->setClickReaction(changecc);
 
-    cc1 = CellContainer::newCellContainer(100, 100, CellContainer::CellAlignment::BOTTOM_MIDDLE, quit_button);
-    cc1->setParent(tf1);
-    cc1->setRelativeX(tf1->getWidth() + 10);
-    cc1->setRelativeY(0);
-
-    cc2 = CellContainer::newCellContainer(100, 100, CellContainer::CellAlignment::TOP_MIDDLE, get_value_btn);
-    cc2->setParent(cc1);
-    cc2->setRelativeX(0);
-    cc2->setRelativeY(cc1->getHeight());
+    pc = PageContainer::newPageContainer(90, 300, 3);
+    pc->pushItem(TextField::newTextField());
+    pc->pushItem(Button::newButton("Kappa"));
+    pc->pushItem(TextField::newTextField());
+    pc->pushItem(Button::newButton("Ok"));
+    pc->setParent(tf1);
+    pc->setRelativeX(tf1->getWidth()+10);
 }

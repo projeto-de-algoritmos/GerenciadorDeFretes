@@ -259,9 +259,9 @@ void VisualComponent::removeChild(VisualComponent * child)
 
 void VisualComponent::draw()
 {
-    if (_texture != nullptr && !_is_hide)
+    if (_texture != nullptr && !_is_hide && !_invisible)
         graphics->drawTexture(_texture, getGlobalBody(), getRotationAngle());
-    else if (_texture == nullptr && !_is_hide)
+    else if (_texture == nullptr && !_is_hide && !_invisible)
         graphics->drawRectangle(getGlobalBody(), _color);
     
     if (_display_cascate && _is_hide)
@@ -274,6 +274,11 @@ void VisualComponent::draw()
 void VisualComponent::setDisplayCascade(bool enable)
 {
     _display_cascate = enable;
+}
+
+void VisualComponent::setInvisibility(bool enable)
+{
+    _invisible = enable;
 }
 
 void VisualComponent::throwException(const std::string & msg)
@@ -303,7 +308,8 @@ _rotation_angle(0.0),
 _is_hide(false),
 _body({0, 0, width, height}),
 _color(color),
-_display_cascate(false)
+_display_cascate(false),
+_invisible(false)
 {
     setParent(getScreenObject());
 }

@@ -64,6 +64,7 @@ public:
     void draw();
 
     void setDisplayCascade(bool enable);
+    void setInvisibility(bool enable);
 
 private:
     static VisualComponent * SCREEN;
@@ -83,6 +84,7 @@ private:
     SDL_Rect _body;
     SDL_Color _color;
     bool _display_cascate;
+    bool _invisible;
 
 protected:
 

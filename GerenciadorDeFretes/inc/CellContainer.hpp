@@ -23,21 +23,24 @@ public:
     };
 
     // Create a new Cell based on item's shape
-    static CellContainer * newCellContainer(VisualComponent * item);
+    static CellContainer * newCellContainer(InteractiveComponent * item);
 
-    // Create a new cell
+    // Create a new cell for visual component item
     static CellContainer * newCellContainer(uint16_t width,
                                             uint16_t height,
+                                            InteractiveComponent * item = nullptr,
                                             CellAlignment cell_alignment = MIDDLE_MIDDLE,
-                                            VisualComponent * item = nullptr,
                                             int32_t pos_x = 0,
                                             int32_t pos_y = 0);
 
-    VisualComponent * getItem() const noexcept;
-    void setItem(VisualComponent * item) noexcept;
+    InteractiveComponent * getItem() const noexcept;
+    void setItem(InteractiveComponent * item) noexcept;
 
     void setWidth(uint16_t width) noexcept;
     void setHeight(uint16_t heigth) noexcept;
+
+    void hideCell() noexcept;
+    void showCell() noexcept;
 
     CellAlignment getCellAlignment() const noexcept;
     void setCellAlignment(CellAlignment cell_alignment) noexcept;
@@ -50,12 +53,13 @@ private:
                   uint16_t height = 0, 
                   int32_t pos_x = 0,
                   int32_t pos_y = 0,
-                  VisualComponent * item = nullptr,
+                  InteractiveComponent * item = nullptr,
                   CellAlignment cell_alignment = MIDDLE_MIDDLE);
     virtual ~CellContainer();
 
-    VisualComponent * _item;
+    InteractiveComponent * _item;
     CellAlignment _cell_alignment;
+    bool _item_is_active;
 
 protected:
 
