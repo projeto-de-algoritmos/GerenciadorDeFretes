@@ -19,6 +19,8 @@ CellContainer * CellContainer::newCellContainer(uint16_t width,
                                                 int32_t pos_x,
                                                 int32_t pos_y)
 {
+    if (item == nullptr)
+        throw std::runtime_error("Attempt to create a cellcontainer without any item");
     return new CellContainer(width, height, pos_x, pos_y, item, cell_alignment);
 }
 

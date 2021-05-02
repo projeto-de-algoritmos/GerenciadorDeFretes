@@ -26,14 +26,11 @@ void PageContainer::pushItem(InteractiveComponent * item) noexcept
     if (items_amount % _items_per_page == 0) {
         new_cell->setRelativeX(0);
         new_cell->setRelativeY(0);
-        std::cout << "cell 1 y = " << new_cell->getRelativeY() << std::endl;
     }
     else {
-        std::cout << "at least I got here\n";
         uint16_t prev_items_amount = items_amount;
         new_cell->setRelativeX(0);
         new_cell->setRelativeY((prev_items_amount % _items_per_page) * (5 + _items_height));
-        std::cout << "cell 2 y = " << new_cell->getRelativeY() << std::endl;
     }
 
     // Verify if this cell does not belong to displayed page
@@ -83,7 +80,7 @@ PageContainer::PageContainer(uint16_t pos_x,
                              uint16_t width,
                              uint16_t height,
                              uint16_t items_per_page):
-InteractiveComponent(pos_x, pos_y),
+InteractiveComponent(width, height),
 _cells(),
 _page_displayed(0),
 _items_per_page(items_per_page),

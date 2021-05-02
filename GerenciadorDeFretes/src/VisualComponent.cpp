@@ -261,6 +261,7 @@ void VisualComponent::draw()
 {
     if (_texture != nullptr && !_is_hide && !_invisible)
         graphics->drawTexture(_texture, getGlobalBody(), getRotationAngle());
+
     else if (_texture == nullptr && !_is_hide && !_invisible)
         graphics->drawRectangle(getGlobalBody(), _color);
     

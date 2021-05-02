@@ -30,7 +30,7 @@ namespace Assets
     // Window assets
     const std::string   WINDOW_TITLE = "Gerenciador de Fretes",
                         WINDOW_ICON_IMAGE_NAME = "assets/delivery_logo.png";
-    const uint16_t      WINDOW_WIDTH = 720,
+    const uint16_t      WINDOW_WIDTH = 820,
                         WINDOW_HEIGHT = 480;
 
     // Timer assets
