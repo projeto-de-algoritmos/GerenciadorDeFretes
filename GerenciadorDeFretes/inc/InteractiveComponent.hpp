@@ -18,6 +18,7 @@ public:
     static void processMouseMotion(const SDL_Point & cursor_coordinates);
     static void processMouseButtonUp(const SDL_Point & cursor_coordinates);
     static void processKeyPressing(int32_t sdl_keysym);
+    static void processMouseScrolling(int32_t amount_scrolled);
 
     void tie();
     void untie();
@@ -84,6 +85,9 @@ protected:
 
     // The reaction when this component loses focus
     virtual void reactToFocusLosing();
+
+    // The reaction when the focused component receives scroll
+    virtual void reactToScrolling(int32_t amount_scrolled);
 };
 
 #endif

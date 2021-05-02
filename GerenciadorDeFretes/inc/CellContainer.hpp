@@ -28,7 +28,7 @@ public:
     // Create a new cell for visual component item
     static CellContainer * newCellContainer(uint16_t width,
                                             uint16_t height,
-                                            InteractiveComponent * item = nullptr,
+                                            InteractiveComponent * item,
                                             CellAlignment cell_alignment = MIDDLE_MIDDLE,
                                             int32_t pos_x = 0,
                                             int32_t pos_y = 0);

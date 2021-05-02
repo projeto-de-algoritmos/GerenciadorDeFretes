@@ -113,6 +113,16 @@ void InteractiveComponent::processKeyPressing(int32_t sdl_keysym)
     _focused_component->reactToKeyPressing(sdl_keysym);
 }
 
+void InteractiveComponent::processMouseScrolling(int32_t amount_scrolled)
+{
+    if (NEUTRAL_COMPONENT == nullptr) {
+        std::cerr << ERROR_MSG << "Attempt to call processMouseScrolling before initialization." << std::endl;
+        throw std::runtime_error("InteractiveComponent not initialized exception");
+    }
+
+    _focused_component->reactToScrolling(amount_scrolled);
+}
+
 void InteractiveComponent::tie()
 {
     _can_drag = false;
@@ -221,6 +231,11 @@ void InteractiveComponent::reactToFocusGaining()
 }
 
 void InteractiveComponent::reactToFocusLosing()
+{
+
+}
+
+void InteractiveComponent::reactToScrolling(int32_t amount_scrolled)
 {
 
 }
