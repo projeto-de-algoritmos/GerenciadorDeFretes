@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+static void EmptyCallBack();
+
 CardInfoComponent * CardInfoComponent::newCardInfoComponent(uint16_t width, uint16_t height, const std::string & image_name)
 {
     return new CardInfoComponent(width, height, image_name);
@@ -47,6 +49,11 @@ _call_back(EmptyCallBack)
     _image->setParent(this);
     _image->setRelativeX(0);
     _image->setRelativeY(0);
+}
+
+CardInfoComponent::~CardInfoComponent()
+{
+
 }
 
 static void EmptyCallBack()
