@@ -1,5 +1,6 @@
 #include "DeliveryPlanning.hpp"
 #include <algorithm>
+#include <iostream>
 
 
 int compatible(std::vector<Delivery *> deliveries, int index){
@@ -31,6 +32,8 @@ std::vector<std::pair<Driver *, Delivery *>> DeliveryPlanning::SolveDeliveryPlan
 
     for(Driver * driver: drivers){
 
+        std::cout << "Working with a driver" << std::endl;
+
 
         std::vector<double> lookupTable(deliveries.size() + 1, 0);
 
@@ -51,6 +54,12 @@ std::vector<std::pair<Driver *, Delivery *>> DeliveryPlanning::SolveDeliveryPlan
             }
         }
 
+    }
+
+    // return signal
+    for(int i = 0; i<(int)answer.size(); ++i){
+        if(answer[i].second->getProfit() < 0)
+            answer[i].second->setProfit(-1*answer[i].second->getProfit());
     }
 
     return answer;
