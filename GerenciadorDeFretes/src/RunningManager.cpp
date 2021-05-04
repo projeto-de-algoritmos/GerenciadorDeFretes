@@ -8,6 +8,7 @@
 #include "DriverInfoCard.hpp"
 
 #include <utility>
+#include <cstdlib>
 
 static Timer timer;
 static bool program_running = true;
@@ -25,6 +26,7 @@ static Button * drivers_menu_previous_page;
 static DynamicText * drivers_menu_current_page;
 
 static Button * create_driver;
+static Button * see_deliveries;
 
 static SolidText * new_driver_name;
 static SolidText * new_driver_age;
@@ -35,13 +37,15 @@ static TextField * new_driver_vehicle_field;
 static Button * new_driver_confirm;
 static Driver * new_driver;
 
-static SliderContainer * sc;
+static std::vector<std::pair<Delivery *, DeliveryInfoCard *>> deliveries;
+static SliderContainer * deliveries_menu;
 
 static void ShowDriverUpdateElements();
 static void HideDriverUpdateElements();
 static void ShowDriverUpdatePage();
 static void CreateDriver();
 static void ConfirmDriver();
+static void ShowDeliveries();
 
 void RunningManager::StartFrame()
 {
@@ -139,22 +143,10 @@ void ShowDriversPage()
 
     create_driver->show();
     create_driver->activate();
+
+    see_deliveries->show();
+    see_deliveries->activate();
 }
-
-// void ShowDeliveriesPage()
-// {
-//     main_menu->hide();
-    
-//     drivers_menu_previous_page->hide();
-//     drivers_menu_previous_page->deactivate();
-//     drivers_menu_current_page->hide();
-//     drivers_menu_next_page->hide();
-//     drivers_menu_next_page->deactivate();
-//     drivers_menu->hide();
-
-//     HideDriverUpdateElements();
-//     deliveries_container->show();
-// }
 
 void NextPageDriversMenu()
 {
@@ -187,6 +179,9 @@ void CreateDriver()
 
     create_driver->hide();
     create_driver->deactivate();
+
+    see_deliveries->hide();
+    see_deliveries->deactivate();
 
     ShowDriverUpdateElements();
 }
@@ -238,6 +233,24 @@ void ConfirmDriver()
 
     HideDriverUpdateElements();
     ShowDriversPage();
+}
+
+void ShowDeliveries()
+{
+    drivers_menu_previous_page->hide();
+    drivers_menu_previous_page->deactivate();
+    drivers_menu_current_page->hide();
+    drivers_menu_next_page->hide();
+    drivers_menu_next_page->deactivate();
+    drivers_menu->hide();
+
+    create_driver->hide();
+    create_driver->deactivate();
+
+    see_deliveries->hide();
+    see_deliveries->deactivate();
+
+    deliveries_menu->show();
 }
 
 void RunningManager::InitializeUIElments()
@@ -299,6 +312,14 @@ void RunningManager::InitializeUIElments()
     create_driver->hide();
     create_driver->deactivate();
 
+    see_deliveries = Button::newButton("Ver entregas");
+    see_deliveries->setParent(create_driver);
+    see_deliveries->setRelativeX(0);
+    see_deliveries->setRelativeY(-create_driver->getHeight() - 10);
+    see_deliveries->setClickReaction(ShowDeliveries);
+    see_deliveries->hide();
+    see_deliveries->deactivate();
+
     // DRIVER UPDATE PAGE
     new_driver_name = SolidText::newSolidText("Nome:");
     new_driver_name->setRelativeX(Assets::WINDOW_WIDTH / 2 - new_driver_name->getWidth() / 2);
@@ -332,4 +353,17 @@ void RunningManager::InitializeUIElments()
     new_driver_confirm->setRelativeY(Assets::WINDOW_HEIGHT - new_driver_confirm->getHeight() - 10);
     new_driver_confirm->setClickReaction(ConfirmDriver);
     HideDriverUpdateElements();
+
+    srand(NULL);
+    for (int i = 0; i < 25; i++) {
+        int64_t initial_secs = rand() % 82800;
+        int64_t final_secs = rand()%(86400-initial_secs + 1) + initial_secs;
+        Delivery * delivery = new Delivery("Entrega " + std::to_string(i+1), Time(initial_secs), Time(final_secs), rand() % 501);
+        deliveries.push_back({delivery, DeliveryInfoCard::newDeliveryInfoCard(delivery, 300, 100)});
+    }
+
+    deliveries_menu = SliderContainer::newSliderContainer(Assets::WINDOW_WIDTH, 300, 100);
+    for (auto delivery : deliveries)
+        deliveries_menu->pushItem(delivery.second);
+    deliveries_menu->hide();
 }
