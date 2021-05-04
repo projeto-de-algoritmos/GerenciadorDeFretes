@@ -23,6 +23,7 @@ std::vector<std::pair<Driver *, Delivery *>> DeliveryPlanning::SolveDeliveryPlan
 
     std::vector<int> compatibleTasks(deliveries.size());
 
+    // pre process compatible slots for each j 
     for(int i = 0; i < (int)compatibleTasks.size(); ++i)
         compatibleTasks[i] = compatible(deliveries, i);
 
