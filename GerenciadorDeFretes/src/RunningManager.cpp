@@ -282,7 +282,7 @@ void ShowPlanning()
         CardInfoComponent * cic = CardInfoComponent::newCardInfoComponent(400, 110, "delivery_logo.png");
         cic->pushText("Entrega: " + pi.second->getName());
         cic->pushText("Motorista: " + pi.first->getDriverName());
-        cic->pushText("Lucro: " + std::to_string(-pi.second->getProfit()));
+        cic->pushText("Lucro: R$ " + std::to_string(pi.second->getProfit()));
         total += pi.second->getProfit();
         planning_cards.push_back(cic);
     }
