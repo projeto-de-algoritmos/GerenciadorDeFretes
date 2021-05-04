@@ -6,9 +6,11 @@
 #include "CardInfoComponent.hpp"
 #include "DeliveryInfoCard.hpp"
 #include "DriverInfoCard.hpp"
+#include "DeliveryPlanning.hpp"
 
 #include <utility>
 #include <cstdlib>
+#include <iostream>
 
 static Timer timer;
 static bool program_running = true;
@@ -39,13 +41,17 @@ static Driver * new_driver;
 
 static std::vector<std::pair<Delivery *, DeliveryInfoCard *>> deliveries;
 static SliderContainer * deliveries_menu;
+static Button * planning_button;
+
+static SliderContainer * drivers_deliveries_menu;
+static std::vector<CardInfoComponent *> planning_cards;
 
 static void ShowDriverUpdateElements();
 static void HideDriverUpdateElements();
-static void ShowDriverUpdatePage();
 static void CreateDriver();
 static void ConfirmDriver();
 static void ShowDeliveries();
+static void ShowPlanning();
 
 void RunningManager::StartFrame()
 {
@@ -251,6 +257,37 @@ void ShowDeliveries()
     see_deliveries->deactivate();
 
     deliveries_menu->show();
+    planning_button->show();
+    planning_button->activate();
+}
+
+void ShowPlanning()
+{
+    deliveries_menu->hide();
+    planning_button->hide();
+    planning_button->hide();
+
+    std::vector<Driver *> t_drivers;
+    for (auto driver : drivers)
+        t_drivers.push_back(driver.first);
+
+    std::vector<Delivery *> t_delivery;
+    for (auto delivery : deliveries)
+        t_delivery.push_back(delivery.first);
+    
+    std::vector<std::pair<Driver *, Delivery *>> result = DeliveryPlanning::SolveDeliveryPlanning(t_drivers, t_delivery);
+    std::cout << result.size() << std::endl;
+    for (auto pi : result) {
+        CardInfoComponent * cic = CardInfoComponent::newCardInfoComponent(300, 100, "delivery_logo.png");
+        cic->pushText("Entrega: " + pi.second->getName());
+        cic->pushText("Motorista: " + pi.first->getDriverName());
+        cic->pushText("Lucro: " + std::to_string(pi.second->getProfit()));
+        planning_cards.push_back(cic);
+    }
+
+    drivers_deliveries_menu = SliderContainer::newSliderContainer(Assets::WINDOW_WIDTH, 300, 100);
+    for (auto card : planning_cards)
+        drivers_deliveries_menu->pushItem(card);
 }
 
 void RunningManager::InitializeUIElments()
@@ -362,8 +399,17 @@ void RunningManager::InitializeUIElments()
         deliveries.push_back({delivery, DeliveryInfoCard::newDeliveryInfoCard(delivery, 300, 100)});
     }
 
+    planning_button = Button::newButton("Planejamento");
+    planning_button->setGlobalX(Assets::WINDOW_WIDTH - planning_button->getWidth() - 10);
+    planning_button->setGlobalY(Assets::WINDOW_HEIGHT - planning_button->getHeight() - 10);
+    planning_button->setClickReaction(ShowPlanning);
+    planning_button->hide();
+    planning_button->deactivate();
+
     deliveries_menu = SliderContainer::newSliderContainer(Assets::WINDOW_WIDTH, 300, 100);
     for (auto delivery : deliveries)
         deliveries_menu->pushItem(delivery.second);
     deliveries_menu->hide();
+
+    planning_button->setParent(deliveries_menu);
 }
