@@ -42,6 +42,7 @@ static Driver * new_driver;
 static std::vector<std::pair<Delivery *, DeliveryInfoCard *>> deliveries;
 static SliderContainer * deliveries_menu;
 static Button * planning_button;
+static SolidText * profit_total;
 
 static SliderContainer * drivers_deliveries_menu;
 static std::vector<CardInfoComponent *> planning_cards;
@@ -276,18 +277,23 @@ void ShowPlanning()
         t_delivery.push_back(delivery.first);
     
     std::vector<std::pair<Driver *, Delivery *>> result = DeliveryPlanning::SolveDeliveryPlanning(t_drivers, t_delivery);
-    std::cout << result.size() << std::endl;
+    double total = 0;
     for (auto pi : result) {
-        CardInfoComponent * cic = CardInfoComponent::newCardInfoComponent(300, 100, "delivery_logo.png");
+        CardInfoComponent * cic = CardInfoComponent::newCardInfoComponent(400, 110, "delivery_logo.png");
         cic->pushText("Entrega: " + pi.second->getName());
         cic->pushText("Motorista: " + pi.first->getDriverName());
-        cic->pushText("Lucro: " + std::to_string(pi.second->getProfit()));
+        cic->pushText("Lucro: " + std::to_string(-pi.second->getProfit()));
+        total += pi.second->getProfit();
         planning_cards.push_back(cic);
     }
 
-    drivers_deliveries_menu = SliderContainer::newSliderContainer(Assets::WINDOW_WIDTH, 300, 100);
+    drivers_deliveries_menu = SliderContainer::newSliderContainer(Assets::WINDOW_WIDTH, 400, 110);
     for (auto card : planning_cards)
         drivers_deliveries_menu->pushItem(card);
+
+    profit_total = SolidText::newSolidText("Total: R$" + std::to_string(total));
+    profit_total->setRelativeX(Assets::WINDOW_WIDTH - profit_total->getWidth() - 10);
+    profit_total->setRelativeY(Assets::WINDOW_HEIGHT - profit_total->getHeight() - 10);
 }
 
 void RunningManager::InitializeUIElments()
