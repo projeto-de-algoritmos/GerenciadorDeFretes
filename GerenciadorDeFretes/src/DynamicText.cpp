@@ -67,13 +67,7 @@ uint16_t DynamicText::getWidth() const noexcept
 
 uint16_t DynamicText::getHeight() const noexcept
 {
-    uint16_t total_height = 0;
-    for (auto child : _chars) {
-        if (child->isHide())
-            break;
-        total_height += child->getHeight();
-    }
-    return total_height;
+    return _chars.front()->getHeight();
 }
 
 void DynamicText::hide()

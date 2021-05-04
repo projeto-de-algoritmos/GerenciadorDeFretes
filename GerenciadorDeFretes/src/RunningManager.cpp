@@ -3,17 +3,45 @@
 #include "PageContainer.hpp"
 #include "CellContainer.hpp"
 #include "SliderContainer.hpp"
+#include "CardInfoComponent.hpp"
+#include "DeliveryInfoCard.hpp"
+#include "DriverInfoCard.hpp"
 
-#include <iostream>
+#include <utility>
 
 static Timer timer;
 static bool program_running = true;
 static SDL_Event event;
 
-static PageContainer * side_bar = nullptr;
 static CellContainer * main_menu = nullptr;
+static Button * quit_button;
+static Button * start_button;
+
+static std::vector<std::pair<Driver *, DriverInfoCard *>> drivers;
+
+static PageContainer * drivers_menu;
+static Button * drivers_menu_next_page;
+static Button * drivers_menu_previous_page;
+static DynamicText * drivers_menu_current_page;
+
+static Button * create_driver;
+
+static SolidText * new_driver_name;
+static SolidText * new_driver_age;
+static SolidText * new_driver_vehicle;
+static TextField * new_driver_name_field;
+static TextField * new_driver_age_field;
+static TextField * new_driver_vehicle_field;
+static Button * new_driver_confirm;
+static Driver * new_driver;
 
 static SliderContainer * sc;
+
+static void ShowDriverUpdateElements();
+static void HideDriverUpdateElements();
+static void ShowDriverUpdatePage();
+static void CreateDriver();
+static void ConfirmDriver();
 
 void RunningManager::StartFrame()
 {
@@ -94,50 +122,214 @@ void RunningManager::RenderScreen()
 
 void ShowDriversPage()
 {
+    main_menu->hide();
 
+    quit_button->hide();
+    quit_button->deactivate();
+
+    start_button->hide();
+    start_button->deactivate();
+
+    drivers_menu_previous_page->show();
+    drivers_menu_previous_page->activate();
+    drivers_menu_current_page->show();
+    drivers_menu_next_page->show();
+    drivers_menu_next_page->activate();
+    drivers_menu->show();
+
+    create_driver->show();
+    create_driver->activate();
 }
 
-void ShowDeliveriesPage()
-{
+// void ShowDeliveriesPage()
+// {
+//     main_menu->hide();
+    
+//     drivers_menu_previous_page->hide();
+//     drivers_menu_previous_page->deactivate();
+//     drivers_menu_current_page->hide();
+//     drivers_menu_next_page->hide();
+//     drivers_menu_next_page->deactivate();
+//     drivers_menu->hide();
 
+//     HideDriverUpdateElements();
+//     deliveries_container->show();
+// }
+
+void NextPageDriversMenu()
+{
+    if (drivers_menu->pageDisplayed() + 1 >= drivers_menu->getPagesQuantity())
+        return;
+
+    drivers_menu->displayPage(drivers_menu->pageDisplayed() + 1);
+    drivers_menu_current_page->setText("Pag. " + std::to_string(drivers_menu->pageDisplayed()));
+}
+
+void PreviousPageDriversMenu()
+{
+    if (drivers_menu->pageDisplayed() == 0)
+        return;
+
+    drivers_menu->displayPage(drivers_menu->pageDisplayed() - 1);
+    drivers_menu_current_page->setText("Pag. " + std::to_string(drivers_menu->pageDisplayed()));
+}
+
+void CreateDriver()
+{
+    new_driver = new Driver("name", 1, "vehicle");
+
+    drivers_menu_previous_page->hide();
+    drivers_menu_previous_page->deactivate();
+    drivers_menu_current_page->hide();
+    drivers_menu_next_page->hide();
+    drivers_menu_next_page->deactivate();
+    drivers_menu->hide();
+
+    create_driver->hide();
+    create_driver->deactivate();
+
+    ShowDriverUpdateElements();
+}
+
+void ShowDriverUpdateElements()
+{
+    new_driver_name->show();
+    new_driver_name_field->show();
+    new_driver_name_field->activate();
+
+    new_driver_age->show();
+    new_driver_age_field->show();
+    new_driver_age_field->activate();
+
+    new_driver_vehicle->show();
+    new_driver_vehicle_field->show();
+    new_driver_vehicle_field->activate();
+
+    new_driver_confirm->show();
+    new_driver_confirm->activate();
+}
+
+void HideDriverUpdateElements()
+{
+    new_driver_name->hide();
+    new_driver_name_field->hide();
+    new_driver_name_field->deactivate();
+
+    new_driver_age->hide();
+    new_driver_age_field->hide();
+    new_driver_age_field->deactivate();
+
+    new_driver_vehicle->hide();
+    new_driver_vehicle_field->hide();
+    new_driver_vehicle_field->deactivate();
+
+    new_driver_confirm->hide();
+    new_driver_confirm->deactivate();
+}
+
+void ConfirmDriver()
+{
+    new_driver->setDriverName(new_driver_name_field->getContent());
+    new_driver->setDriverVehicleName(new_driver_vehicle_field->getContent());
+    new_driver->setDriverAge(std::stod(new_driver_age_field->getContent()));
+    
+    drivers.push_back({new_driver, DriverInfoCard::newDriverInfoCard(new_driver, 300, 100)});
+    drivers_menu->pushItem(drivers.back().second);
+
+    HideDriverUpdateElements();
+    ShowDriversPage();
 }
 
 void RunningManager::InitializeUIElments()
-{
-    side_bar = PageContainer::newPageContainer(Assets::BUTTON_WIDTH + 10, Assets::WINDOW_HEIGHT, 5);
-    side_bar->setColor({163, 204, 186, 255});
-    side_bar->setInvisibility(false);
-    side_bar->show();
-    
-    Button * button;
-
-    button = Button::newButton("Motoristas");
-    button->setClickReaction(ShowDriversPage);
-    side_bar->pushItem(button);
-
-    button = Button::newButton("Fretes");
-    button->setClickReaction(ShowDeliveriesPage);
-    side_bar->pushItem(button);
-
-    button = Button::newButton("Sair");
-    button->setClickReaction(RunningManager::FinishProgramExecution);
-    side_bar->pushItem(button);
-
-    // main_menu = CellContainer::newCellContainer(Assets::WINDOW_WIDTH - side_bar->getWidth(), Assets::WINDOW_HEIGHT, SolidImage::newSolidImage("Delivery.jpg", 425, 300));
-    // main_menu->setRelativeX(side_bar->getWidth());
-    // main_menu->setRelativeY(0);
-
-    sc = SliderContainer::newSliderContainer(Assets::WINDOW_WIDTH - side_bar->getWidth(), 200, 80);
-    sc->pushItem(Button::newButton("Ola xapa"));
-    sc->pushItem(SolidImage::newSolidImage("delivery_logo.png", 80, 80));
-    sc->pushItem(SolidText::newSolidText("Respeita", "arial.ttf", 20, {0,0,0,255}));
-    sc->pushItem(TextField::newTextField());
-    sc->pushItem(Button::newButton("kkkkk"));
-    sc->pushItem(SolidImage::newSolidImage("delivery_logo.png", 80, 80));
-    sc->pushItem(SolidImage::newSolidImage("delivery_logo.png", 80, 80));
-    sc->pushItem(SolidImage::newSolidImage("delivery_logo.png", 80, 80));
-
-    main_menu = CellContainer::newCellContainer(Assets::WINDOW_WIDTH - side_bar->getWidth(), Assets::WINDOW_HEIGHT, sc);
-    main_menu->setRelativeX(side_bar->getWidth());
+{   
+    main_menu = CellContainer::newCellContainer(Assets::WINDOW_WIDTH, Assets::WINDOW_HEIGHT, SolidImage::newSolidImage("Delivery.jpg", 425, 300));
+    main_menu->setRelativeX(0);
     main_menu->setRelativeY(0);
+
+    quit_button = Button::newButton("Sair");
+    quit_button->setClickReaction(FinishProgramExecution);
+    quit_button->setRelativeX(Assets::WINDOW_WIDTH / 2 - quit_button->getWidth() / 2);
+    quit_button->setRelativeY(Assets::WINDOW_HEIGHT - quit_button->getHeight() - 10);
+
+    start_button = Button::newButton("Iniciar");
+    start_button->setClickReaction(ShowDriversPage);
+    start_button->setParent(quit_button);
+    start_button->setRelativeX(quit_button->getWidth() + 5);
+    start_button->setRelativeY(0);
+
+    // // DRIVERS PAGE
+    Driver * tmp_driver = new Driver("Joaquim Teixeira", 62, "Scania 113h");
+    DriverInfoCard * tmp_dic = DriverInfoCard::newDriverInfoCard(tmp_driver, 300, 100);
+    drivers.push_back({tmp_driver, tmp_dic});
+
+    drivers_menu_current_page = DynamicText::newDynamicText("Pag. 0");
+    drivers_menu_next_page = Button::newButton("Proxima Pag.");
+    drivers_menu_next_page->setClickReaction(NextPageDriversMenu);
+
+    drivers_menu_previous_page = Button::newButton("Pag. Anterior");
+    drivers_menu_previous_page->setClickReaction(PreviousPageDriversMenu);
+    
+    drivers_menu = PageContainer::newPageContainer(Assets::WINDOW_WIDTH, Assets::WINDOW_HEIGHT - Assets::BUTTON_HEIGHT - 10, 3);
+    for (auto driver : drivers)
+        drivers_menu->pushItem(driver.second);
+    
+    drivers_menu_current_page->setParent(drivers_menu);
+    drivers_menu_current_page->setRelativeX(drivers_menu->getWidth() / 2 - drivers_menu_current_page->getWidth() / 2);
+    drivers_menu_current_page->setRelativeY(drivers_menu->getHeight() + Assets::BUTTON_HEIGHT / 2 - drivers_menu_current_page->getHeight() / 2);
+
+    drivers_menu_previous_page->setParent(drivers_menu);
+    drivers_menu_previous_page->setRelativeX(drivers_menu_current_page->getRelativeX() - drivers_menu_previous_page->getWidth() - 10);
+    drivers_menu_previous_page->setRelativeY(drivers_menu->getHeight() + 5);
+
+    drivers_menu_next_page->setParent(drivers_menu);
+    drivers_menu_next_page->setRelativeX(drivers_menu_current_page->getRelativeX() + drivers_menu_current_page->getWidth() + 10);
+    drivers_menu_next_page->setRelativeY(drivers_menu->getHeight() + 5);
+
+    drivers_menu_previous_page->hide();
+    drivers_menu_previous_page->deactivate();
+    drivers_menu_current_page->hide();
+    drivers_menu_next_page->hide();
+    drivers_menu_next_page->deactivate();
+    drivers_menu->hide();
+
+    create_driver = Button::newButton("Novo motorista");
+    create_driver->setRelativeX(Assets::WINDOW_WIDTH - create_driver->getWidth() - 10);
+    create_driver->setRelativeY(Assets::WINDOW_HEIGHT - create_driver->getHeight() - 10);
+    create_driver->setClickReaction(CreateDriver);
+    create_driver->hide();
+    create_driver->deactivate();
+
+    // DRIVER UPDATE PAGE
+    new_driver_name = SolidText::newSolidText("Nome:");
+    new_driver_name->setRelativeX(Assets::WINDOW_WIDTH / 2 - new_driver_name->getWidth() / 2);
+    new_driver_name->setRelativeY(10);
+    new_driver_name_field = TextField::newTextField();
+    new_driver_name_field->setParent(new_driver_name);
+    new_driver_name_field->setRelativeX(0);
+    new_driver_name_field->setRelativeY(new_driver_name->getHeight() + 3);
+
+    new_driver_age = SolidText::newSolidText("Idade:");
+    new_driver_age->setParent(new_driver_name_field);
+    new_driver_age->setRelativeX(0);
+    new_driver_age->setRelativeY(new_driver_name_field->getHeight() + 10);
+    new_driver_age_field = TextField::newTextField();
+    new_driver_age_field->setParent(new_driver_age);
+    new_driver_age_field->setRelativeX(0);
+    new_driver_age_field->setRelativeY(new_driver_age->getHeight() + 3);
+    new_driver_age_field->setNumericOnlyMode();
+
+    new_driver_vehicle = SolidText::newSolidText("Veiculo:");
+    new_driver_vehicle->setParent(new_driver_age_field);
+    new_driver_vehicle->setRelativeX(0);
+    new_driver_vehicle->setRelativeY(new_driver_age_field->getHeight() + 10);
+    new_driver_vehicle_field = TextField::newTextField();
+    new_driver_vehicle_field->setParent(new_driver_vehicle);
+    new_driver_vehicle_field->setRelativeX(0);
+    new_driver_vehicle_field->setRelativeY(new_driver_vehicle->getHeight() + 3);
+    
+    new_driver_confirm = Button::newButton("Confirmar");
+    new_driver_confirm->setRelativeX(Assets::WINDOW_WIDTH / 2 - new_driver_confirm->getWidth() / 2);
+    new_driver_confirm->setRelativeY(Assets::WINDOW_HEIGHT - new_driver_confirm->getHeight() - 10);
+    new_driver_confirm->setClickReaction(ConfirmDriver);
+    HideDriverUpdateElements();
 }

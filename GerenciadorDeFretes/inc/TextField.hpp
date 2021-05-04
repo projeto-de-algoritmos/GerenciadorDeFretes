@@ -32,6 +32,9 @@ public:
 
     double getNumericValue() const noexcept;
 
+    void hide() noexcept;
+    void show() noexcept;
+
 private:
     bool isAlpha(int32_t c);
     bool isNumeric(int32_t c);

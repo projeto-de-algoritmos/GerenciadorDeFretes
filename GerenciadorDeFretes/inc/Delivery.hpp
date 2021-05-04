@@ -29,6 +29,7 @@ public:
     // Returns profit * 100 as Interger
     int32_t getShiftedIntergerProfit() const noexcept;
     void setProfit(double profit) noexcept;
+    
 private:
     std::string _name;
     Time _start;

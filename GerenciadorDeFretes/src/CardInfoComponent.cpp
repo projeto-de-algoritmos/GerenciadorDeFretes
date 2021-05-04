@@ -1,6 +1,12 @@
 #include "CardInfoComponent.hpp"
+#include "Assets.hpp"
 
 #include <stdexcept>
+
+static void EmptyCallBack(void *)
+{
+
+}
 
 CardInfoComponent * CardInfoComponent::newCardInfoComponent(uint16_t width, uint16_t height, const std::string & image_name)
 {
@@ -9,12 +15,12 @@ CardInfoComponent * CardInfoComponent::newCardInfoComponent(uint16_t width, uint
 
 void CardInfoComponent::pushText(const std::string & text)
 {
-    DynamicText * dt = DynamicText::newDynamicText(text);
+    DynamicText * dt = DynamicText::newDynamicText(text, Assets::DYNAMICTEXT_FONT_NAME, 16, Assets::DARK_GREEN);
     
     if (_texts.empty()) {
         dt->setParent(this);
-        dt->setRelativeX(_image->getWidth() + 5);
-        dt->setRelativeY(0);
+        dt->setRelativeX(_image->getWidth() + 15);
+        dt->setRelativeY(10);
     } else {
         dt->setParent(_texts.back());
         dt->setRelativeX(0);
@@ -31,7 +37,7 @@ void CardInfoComponent::updateText(int32_t index, const std::string & text)
     _texts[index]->setText(text);
 }
 
-void CardInfoComponent::setCallBackClickReaction(std::function<void()> call_back)
+void CardInfoComponent::setCallBackClickReaction(std::function<void(void *)> call_back)
 {
     _call_back = call_back;
 }
@@ -41,15 +47,30 @@ InteractiveComponent(width, height),
 _call_back(EmptyCallBack)
 {
     VisualComponent::setInvisibility(false);
-    VisualComponent::setColor({255, 255, 255, 255});
+    VisualComponent::setColor(Assets::SUPER_LIGHT_GREEN);
     InteractiveComponent::tie();
-    _image = SolidImage::newSolidImage(image_name, width / 3, height);
+    _image = SolidImage::newSolidImage(image_name, width / 3 - 10, height - 10);
     _image->setParent(this);
-    _image->setRelativeX(0);
-    _image->setRelativeY(0);
+    _image->setRelativeX(5);
+    _image->setRelativeY(5);
 }
 
-static void EmptyCallBack()
+CardInfoComponent::~CardInfoComponent()
 {
+    _call_back(this);
+}
 
+void CardInfoComponent::reactToClick(const SDL_Point & cursor_coordinates)
+{
+    
+}
+
+void CardInfoComponent::reactToCursorOverlappingComponent(const SDL_Point & cursor_coordinates)
+{
+    VisualComponent::setColor(Assets::LIGHT_GREEN);
+}
+
+void CardInfoComponent::reactToCursorStopedOverlappingComponent(const SDL_Point & cursor_coordinates)
+{
+    VisualComponent::setColor(Assets::SUPER_LIGHT_GREEN);
 }

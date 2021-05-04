@@ -97,6 +97,20 @@ double TextField::getNumericValue() const noexcept
     return std::stod(str);
 }
 
+void TextField::hide() noexcept
+{
+    _normal_background->hide();
+    _highlight_background->hide();
+    _focused_background->hide();
+    _content->hide();
+}
+
+void TextField::show() noexcept
+{
+    _normal_background->show();
+    _content->show();
+}
+
 bool TextField::isAlpha(int32_t c)
 {
     return (c >= int32_t('a') && c <= int32_t('z')) || (c >= int32_t('A') && c <= int32_t('Z') || c == ' ');
@@ -149,7 +163,7 @@ bool TextField::validateText(int32_t c)
 TextField::TextField(uint16_t width, uint16_t height):
 InteractiveComponent(width, height)
 {
-
+    VisualComponent::setInvisibility(true);
 }
 
 TextField::TextField(TextField & tf):
@@ -190,6 +204,8 @@ void TextField::reactToCursorStopedOverlappingComponent(const SDL_Point & cursor
 
 void TextField::reactToFocusGaining()
 {
+    if (!_focused_background->isHide())
+        return;
     _normal_background->hide();
     _highlight_background->hide();
     _focused_background->show();
@@ -197,6 +213,8 @@ void TextField::reactToFocusGaining()
 
 void TextField::reactToFocusLosing()
 {
+    if (_focused_background->isHide())
+        return;
     _normal_background->show();
     _highlight_background->hide();
     _focused_background->hide();

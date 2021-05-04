@@ -65,6 +65,17 @@ namespace Assets
     const std::string   TEXTFIELD_NORMAL_BACKGROUND = "normal_textfield.png",
                         TEXTFIELD_HIGHLIGHT_BACKGROUND = "highlight_textfield.png",
                         TEXTFIELD_FOCUSED_BACKGROUND = "focused_textfield.png";
+
+    // Standard color palete
+    const SDL_Color     DARK_GREEN = {0, 112, 77, 255},
+                        MEDIUM_GREEN = {24, 201, 146, 255},
+                        LIGHT_GREEN = {104, 242, 199, 255},
+                        SUPER_LIGHT_GREEN = {202, 250, 235, 255},
+                        WHITE = {255, 255, 255, 255}; 
+
+    // Cards Assets
+    const std::string   DELIVERY_PICTURE_NAME = "delivery_logo.png",
+                        DRIVER_PICTURE_NAME = "delivery_logo.png";
 }
 
 #endif
